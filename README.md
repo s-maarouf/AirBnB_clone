@@ -31,10 +31,10 @@ Examples
 > Here are a few examples of how to use the command interpreter:
 
 Creating a new user:
-(hbnb) create User
+> (hbnb) create User
 Showing information about a user:
-(hbnb) show User 123456
+> (hbnb) show User 123456
 Displaying information about all instances:
-(hbnb) all
+> (hbnb) all
 Updating attributes of a listing:
-(hbnb) update Listing 78910 title "New Title"
+> (hbnb) update Listing 78910 title "New Title"
