@@ -1,15 +1,10 @@
 #!/usr/bin/python3
 
 import cmd
-<<<<<<< HEAD
 import models
 from models.base_model import BaseModel
 import re
 
-=======
-from datetime import datetime
-import models
->>>>>>> 51398e9d1354498c558a86797e397dc3de147ad8
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
