@@ -149,10 +149,20 @@ Usage: update <class name> <id> <attribute name> "<attribute value>\""""
                     obj.__dict__[k] = v
         models.storage.save()
 
+    def do_count(self, arg):
+        """Counts the number of instances of a class"""
+        argums = HBNBCommand.parse(arg)
+        count = 0
+        for obj in models.storage.all().values():
+            if argums[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
+
     def default(self, arg):
         """default behavior for cmd when input is invalid"""
         argdict = {
             "all": self.do_all,
+            "count": self.do_count,
         }
         match = re.search(r"\.", arg)
         if match is not None:
