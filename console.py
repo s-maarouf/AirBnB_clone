@@ -13,6 +13,7 @@ class HBNBCommand(cmd.Cmd):
 
     classes = {
         "BaseModel",
+        "User",
     }
 
     def parse(arg):
