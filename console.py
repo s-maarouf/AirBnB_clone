@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import cmd
-
+from datetime import datetime
+import models
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
