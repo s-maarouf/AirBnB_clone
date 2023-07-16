@@ -227,3 +227,7 @@ $
 
 $
 ```
+
+## Author's notes:
+
+This project was made by [@s-maarouf](https://github.com/s-maarouf) and [@ABDE-LKADER](https://github.com/ABDE-LKADER)
