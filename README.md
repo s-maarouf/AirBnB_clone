@@ -4,19 +4,25 @@ __*AirBnB Console*__
 The Airbnb Console is a command-line interface (CLI) tool that provides a simplified interface for managing various aspects of an Airbnb-like platform. With this tool, you can perform administrative tasks, manage user accounts, handle property listings, and more.
 </p>
 
-Description of the Command Interpreter
-The command interpreter is a command-line interface (CLI) that allows users to interact with the AirBnB Clone project. It provides a set of commands to perform various actions, such as creating listings, searching for accommodations, and managing user information.
+__*Command Interpreter*__
 
-How to Start the Command Interpreter
+<p>
+The command interpreter is a command-line interface (CLI) that allows users to interact with the AirBnB Clone project. It provides a set of commands to perform various actions, such as creating listings, searching for accommodations, and managing user information.
+</p>
+
+__*How to Start the Command Interpreter*__
+
+<p>
 To start the command interpreter, follow these steps:
 
 Open a terminal or command prompt.
 Navigate to the project directory.
-Run the following command to start the interpreter:
-shell
-Copy code
-$ ./console.py
-How to Use the Command Interpreter
+Run the following command to start the interpreter: ./console.py
+</p>
+
+__*How to Use the Command Interpreter*__
+
+<p>
 Once the command interpreter is running, you can use various commands to interact with the AirBnB Clone project. Here are some examples of commonly used commands:
 
 help: Displays a list of available commands and their descriptions.
@@ -26,9 +32,10 @@ show: Displays information about a specific instance.
 all: Displays information about all instances.
 update: Updates attributes of a specified instance.
 For a complete list of commands and their usage, refer to the documentation or use the help command within the interpreter.
+</p>
 
-Examples
-> Here are a few examples of how to use the command interpreter:
+__*Examples*__
+Here are a few examples of how to use the command interpreter:
 
 Creating a new user:
 > (hbnb) create User
