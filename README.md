@@ -17,7 +17,8 @@ To start the command interpreter, follow these steps:
 
 Open a terminal or command prompt.
 Navigate to the project directory.
-Run the following command to start the interpreter: ./console.py
+Run the following command to start the interpreter:
+> ./console.py
 </p>
 
 __*How to Use the Command Interpreter*__
