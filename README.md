@@ -1,51 +1,229 @@
-<h2>AirBnB Console*__</h2>
+# 0x00. AirBnB clone - The console
 
-<p>
-The Airbnb Console is a command-line interface (CLI) tool that provides a simplified interface for managing various aspects of an Airbnb-like platform. With this tool, you can perform administrative tasks, manage user accounts, handle property listings, and more.
-</p>
+## Introduction
 
-__*Command Interpreter*__
+This is a team project to make a clone of [AirBnb](https://fr.airbnb.com/)'s console
+<br>
+We want to be able to manage the objects of our project:
 
-<p>
-The command interpreter is a command-line interface (CLI) that allows users to interact with the AirBnB Clone project. It provides a set of commands to perform various actions, such as creating listings, searching for accommodations, and managing user information.
-</p>
+- Create a new object (ex: a new User or a new Place)
+- Retrieve an object from a file, a database etc…
+- Do operations on objects (count, compute stats, etc…)
+- Update attributes of an object
+- Destroy an object
 
-__*How to Start the Command Interpreter*__
+## Resources
 
-<p>
-To start the command interpreter, follow these steps:
+- [cmd module](https://docs.python.org/3.8/library/cmd.html)
+- [uuid module](https://docs.python.org/3.8/library/uuid.html)
+- [datetime](https://docs.python.org/3.8/library/datetime.html)
+- [args/kwargs](https://yasoob.me/2013/08/04/args-and-kwargs-in-python-explained/)
+- [unittest module](https://intranet.alxswe.com/rltoken/IlFiMB8UmqBG2CxA0AD3jA)
+- [python unittest](https://intranet.alxswe.com/rltoken/begh14KQA-3ov29KvD_HvA)
 
-Open a terminal or command prompt.
-Navigate to the project directory.
-Run the following command to start the interpreter:
-> ./console.py
-</p>
+## General
 
-__*How to Use the Command Interpreter*__
+### Installation
 
-<p>
-Once the command interpreter is running, you can use various commands to interact with the AirBnB Clone project. Here are some examples of commonly used commands:
+```bash
+git clone https://github.com/s-maarouf/AirBnB_clone.git
+```
 
-help: Displays a list of available commands and their descriptions.
-quit: Exits the command interpreter.
-create: Creates a new instance of a specified class.
-show: Displays information about a specific instance.
-all: Displays information about all instances.
-update: Updates attributes of a specified instance.
-For a complete list of commands and their usage, refer to the documentation or use the help command within the interpreter.
-</p>
+### Execution
 
-__*Examples*__
-Here are a few examples of how to use the command interpreter:
+**In interactive mode**
 
-Creating a new user:
-> (hbnb) create User
+```bash
+$ ./console.py
+(hbnb) help
 
-Showing information about a user:
-> (hbnb) show User 123456
+Documented commands (type help <topic>):
+========================================
+EOF  help  quit
 
-Displaying information about all instances:
-> (hbnb) all
+(hbnb) 
+(hbnb) 
+(hbnb) quit
+$
+```
 
-Updating attributes of a listing:
-> (hbnb) update Listing 78910 title "New Title"
+**In non-interactive mode**
+
+```bash
+$ echo "help" | ./console.py
+(hbnb)
+
+Documented commands (type help <topic>):
+========================================
+EOF  help  quit
+(hbnb) 
+$
+$ cat test_help
+help
+$
+$ cat test_help | ./console.py
+(hbnb)
+
+Documented commands (type help <topic>):
+========================================
+EOF  help  quit
+(hbnb) 
+$
+```
+
+### Commands usage
+
+- **help**: list available commands:
+
+```bash
+(hbnb) help
+
+Documented commands (type help <topic>):
+========================================
+EOF  all  create  destroy  help  quit  show  update
+
+(hbnb)
+```
+
+<br>
+
+- **help \<command\>**: prints command documentation
+
+```bash
+(hbnb) help <command>
+```
+
+> example
+
+```bash
+(hbnb) help destroy
+Deletes an instance
+(hbnb)
+```
+
+<br>
+
+- **create**: to create a new instance:
+
+```bash
+(hbnb) create <class_name>
+```
+
+> example
+
+```bash
+(hbnb) create BaseModel
+73fea987-e376-4de8-9964-1f17c59737ca
+(hbnb)
+```
+
+<br>
+
+- **show**: to show an instance informations:
+
+```bash
+(hbnb) show <class_name> <class_id>
+```
+
+> example
+
+```bash
+(hbnb) show BaseModel 73fea987-e376-4de8-9964-1f17c59737ca
+[BaseModel] (73fea987-e376-4de8-9964-1f17c59737ca) {'id': '73fea987-e376-4de8-9964-1f17c59737ca', 'created_at': datetime.datetime(2023, 7, 16, 22, 23, 37, 618037), 'updated_at': datetime.datetime(2023, 7, 16, 22, 23, 37, 618037)}
+(hbnb)
+```
+
+<br>
+
+- **destroy**: to destroy an instance:
+
+```bash
+(hbnb) destroy <class_name> <class_id>
+```
+
+> example
+
+```bash
+(hbnb) destroy BaseModel 73fea987-e376-4de8-9964-1f17c59737ca
+(hbnb)
+```
+
+<br>
+
+- **all**: to show all instances based or not on the class name
+
+```bash
+(hbnb) all
+```
+
+> example
+
+```bash
+(hbnb) all
+[]
+(hbnb) create BaseModel
+f9f6c985-14d1-4d4f-be9e-c2c80594c33f
+(hbnb) all
+["[BaseModel] (f9f6c985-14d1-4d4f-be9e-c2c80594c33f) {'id': 'f9f6c985-14d1-4d4f-be9e-c2c80594c33f', 'created_at': datetime.datetime(2023, 7, 16, 22, 30, 25, 505852), 'updated_at': datetime.datetime(2023, 7, 16, 22, 30, 25, 505852)}"]
+(hbnb) create User
+97763dfd-9521-46fb-bd2a-af570cfaf29b
+(hbnb) all
+["[BaseModel] (f9f6c985-14d1-4d4f-be9e-c2c80594c33f) {'id': 'f9f6c985-14d1-4d4f-be9e-c2c80594c33f', 'created_at': datetime.datetime(2023, 7, 16, 22, 30, 25, 505852), 'updated_at': datetime.datetime(2023, 7, 16, 22, 30, 25, 505852)}", "[User] (97763dfd-9521-46fb-bd2a-af570cfaf29b) {'id': '97763dfd-9521-46fb-bd2a-af570cfaf29b', 'created_at': datetime.datetime(2023, 7, 16, 22, 30, 30, 855188), 'updated_at': datetime.datetime(2023, 7, 16, 22, 30, 30, 855188)}"]
+(hbnb)
+```
+
+<br>
+
+- **update**: to update an instance  by adding or updating attribute
+
+```bash
+(hbnb) update <class_name> <class_id> <attribute name> "<attribute value>"
+```
+
+> example
+
+```bash
+(hbnb) update User 97763dfd-9521-46fb-bd2a-af570cfaf29b first_name "SMAAROUF"
+(hbnb) show User 97763dfd-9521-46fb-bd2a-af570cfaf29b
+[User] (97763dfd-9521-46fb-bd2a-af570cfaf29b) {'id': '97763dfd-9521-46fb-bd2a-af570cfaf29b', 'created_at': datetime.datetime(2023, 7, 16, 22, 30, 30, 855188), 'updated_at': datetime.datetime(2023, 7, 16, 22, 30, 30, 855188), 'first_name': '"SMAAROUF"'}
+(hbnb)
+```
+
+<br>
+
+- **count**: to count the number of instances of a class
+
+```bash
+(hbnb) count <class_name>
+```
+
+> example
+
+```bash
+(hbnb) create City
+4e01c33e-2564-42c2-b61c-17e512898bad
+(hbnb) create City
+e952b772-80a5-41e9-b728-6bc4dc5c21b4
+(hbnb) count City
+2
+(hbnb)
+```
+
+<br>
+
+- **quit**: to quit the console:
+
+```bash
+(hbnb) quit
+$
+```
+
+<br>
+
+- **EOF**: exit the program using EOF
+
+```bash
+(hbnb) EOF
+
+$
+```
