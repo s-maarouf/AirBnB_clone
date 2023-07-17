@@ -11,7 +11,6 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
-
 class HBNBCommand(cmd.Cmd):
     """Command interpreter class"""
     prompt = '(hbnb) '
@@ -64,77 +63,100 @@ class HBNBCommand(cmd.Cmd):
         elif arg not in HBNBCommand.classes:
             print("** class doesn't exist **")
         else:
-            new_instance = eval(arg)()
-            new_instance.save()
-            print(new_instance.id)
+            print(eval(arg)().id)
+            models.storage.save()
 
     def do_show(self, arg):
-        """Prints the string representation of a specified instance"""
-        args = HBNBCommand.parse(arg)
-        if len(args) == 0:
+        """Prints the string representation of an instance"""
+        argums = HBNBCommand.parse(arg)
+        obdict = models.storage.all()
+        if len(argums) == 0:
             print("** class name missing **")
-        elif args[0] not in HBNBCommand.classes:
+        elif argums[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        elif len(args) == 1:
+        elif len(argums) == 1:
             print("** instance id missing **")
+        elif "{}.{}".format(argums[0], argums[1]) not in obdict:
+            print("** no instance found **")
         else:
-            key = "{}.{}".format(args[0], args[1])
-            if key in models.storage.all():
-                print(models.storage.all()[key])
-            else:
-                print("** no instance found **")
+            print(obdict["{}.{}".format(argums[0], argums[1])])
 
     def do_destroy(self, arg):
-        """Deletes a specified instance"""
-        args = HBNBCommand.parse(arg)
-        if len(args) == 0:
+        """Deletes an instance"""
+        argums = HBNBCommand.parse(arg)
+        obdict = models.storage.all()
+        if len(argums) == 0:
             print("** class name missing **")
-        elif args[0] not in HBNBCommand.classes:
+        elif argums[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        elif len(args) == 1:
+        elif len(argums) == 1:
             print("** instance id missing **")
+        elif "{}.{}".format(argums[0], argums[1]) not in obdict:
+            print("** no instance found **")
         else:
-            key = "{}.{}".format(args[0], args[1])
-            if key in models.storage.all():
-                del models.storage.all()[key]
-                models.storage.save()
-            else:
-                print("** no instance found **")
+            del obdict["{}.{}".format(argums[0], argums[1])]
+            models.storage.save()
 
     def do_all(self, arg):
-        """Prints all string representations of all instances"""
-        args = HBNBCommand.parse(arg)
-        instances = models.storage.all()
-        if len(args) == 0:
-            print([str(instance) for instance in instances.values()])
-        elif args[0] in HBNBCommand.classes:
-            print([str(instance) for instance in instances.values()
-                if type(instance).__name__ == args[0]])
-        else:
+        """Prints all instances"""
+        argums = HBNBCommand.parse(arg)
+        obdict = models.storage.all()
+        if len(argums) > 0 and argums[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
+        else:
+            objv = []
+            for obj in obdict.values():
+                if len(argums) > 0 and argums[0] == obj.__class__.__name__:
+                    objv.append(obj.__str__())
+                elif len(argums) == 0:
+                    objv.append(obj.__str__())
+            print(objv)
 
     def do_update(self, arg):
-        """Updates an attribute of a specified instance"""
-        args = HBNBCommand.parse(arg)
-        if len(args) == 0:
+        """Updates an instance
+Usage: update <class name> <id> <attribute name> "<attribute value>\""""
+        argums = HBNBCommand.parse(arg)
+        obdict = models.storage.all()
+
+        if len(argums) == 0:
             print("** class name missing **")
-        elif args[0] not in HBNBCommand.classes:
+            return False
+        if argums[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        elif len(args) == 1:
+            return False
+        if len(argums) == 1:
             print("** instance id missing **")
-        elif len(args) == 2:
+            return False
+        if "{}.{}".format(argums[0], argums[1]) not in obdict.keys():
+            print("** no instance found **")
+            return False
+        if len(argums) == 2:
             print("** attribute name missing **")
-        elif len(args) == 3:
-            print("** value missing **")
-        else:
-            key = "{}.{}".format(args[0], args[1])
-            instances = models.storage.all()
-            if key in instances:
-                instance = instances[key]
-                setattr(instance, args[2], args[3].strip('"'))
-                instance.save()
+            return False
+        if len(argums) == 3:
+            try:
+                type(eval(argums[2])) != dict
+            except NameError:
+                print("** value missing **")
+                return False
+
+        if len(argums) == 4:
+            obj = obdict["{}.{}".format(argums[0], argums[1])]
+            if argums[2] in obj.__class__.__dict__.keys():
+                valtype = type(obj.__class__.__dict__[argums[2]])
+                obj.__dict__[argums[2]] = valtype(argums[3])
             else:
-                print("** no instance found **")
+                obj.__dict__[argums[2]] = argums[3]
+        elif type(eval(argums[2])) == dict:
+            obj = obdict["{}.{}".format(argums[0], argums[1])]
+            for k, v in eval(argums[2]).items():
+                if (k in obj.__class__.__dict__.keys() and
+                        type(obj.__class__.__dict__[k]) in {str, int, float}):
+                    valtype = type(obj.__class__.__dict__[k])
+                    obj.__dict__[k] = valtype(v)
+                else:
+                    obj.__dict__[k] = v
+        models.storage.save()
 
 
 if __name__ == '__main__':
