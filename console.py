@@ -119,52 +119,41 @@ Usage: all, or <class_name> all, or <class_name>.all()"""
 
     def do_update(self, arg):
         """Updates an instance based on its ID with a dictionary representation
-Usage: update <class_name> <id> <dictionary_representation>
-
-Example: update User 12345678-1234-1234-1234-1234567890ab {"name": "John", "age": 30}
-        """
-        argums = HBNBCommand.parse(arg)
+        Usage: update <class_name> <id> <dictionary_representation>"""
+        args = HBNBCommand.parse(arg)
         obdict = models.storage.all()
 
-        if len(argums) == 0:
+        if len(args) == 0:
             print("** class name missing **")
             return False
-        if argums[0] not in HBNBCommand.classes:
+        if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return False
-        if len(argums) == 1:
+        if len(args) == 1:
             print("** instance id missing **")
             return False
-        if "{}.{}".format(argums[0], argums[1]) not in obdict.keys():
+        if "{}.{}".format(args[0], args[1]) not in obdict.keys():
             print("** no instance found **")
             return False
-        if len(argums) == 2:
+        if len(args) == 2:
             print("** attribute name missing **")
             return False
-        if len(argums) == 3:
+        if len(args) == 3:
             try:
-                type(eval(argums[2])) != dict
-            except NameError:
-                print("** value missing **")
+                dictionary = eval(args[2])
+                if not isinstance(dictionary, dict):
+                    raise SyntaxError
+            except (NameError, SyntaxError):
+                print("** invalid dictionary representation **")
                 return False
 
-        if len(argums) == 4:
-            obj = obdict["{}.{}".format(argums[0], argums[1])]
-            if argums[2] in obj.__class__.__dict__.keys():
-                valtype = type(obj.__class__.__dict__[argums[2]])
-                obj.__dict__[argums[2]] = valtype(argums[3])
+        obj = obdict["{}.{}".format(args[0], args[1])]
+        for key, value in dictionary.items():
+            if key in obj.__dict__.keys():
+                setattr(obj, key, value)
             else:
-                obj.__dict__[argums[2]] = argums[3]
-        elif type(eval(argums[2])) == dict:
-            obj = obdict["{}.{}".format(argums[0], argums[1])]
-            for k, v in eval(argums[2]).items():
-                if (k in obj.__class__.__dict__.keys() and
-                        type(obj.__class__.__dict__[k]) in {str, int, float}):
-                    valtype = type(obj.__class__.__dict__[k])
-                    obj.__dict__[k] = valtype(v)
-                else:
-                    obj.__dict__[k] = v
-        models.storage.save()
+                obj.__dict__[key] = value
+        obj.save()
 
     def do_count(self, arg):
         """Counts the number of instances of a class
