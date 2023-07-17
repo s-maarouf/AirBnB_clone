@@ -168,6 +168,7 @@ Usage: count <class_name>, or <class_name>.count()"""
         argdict = {
             "all": self.do_all,
             "count": self.do_count,
+            "show": self.do_show,
         }
         match = re.search(r"\.", arg)
         if match is not None:
