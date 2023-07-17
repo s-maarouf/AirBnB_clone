@@ -4,12 +4,12 @@ import cmd
 import models
 from models.base_model import BaseModel
 from models.user import User
-from models.amenity import Amenity
-from models.city import City
-from models.place import Place
-from models.review import Review
-from models.state import State
 import re
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
@@ -19,6 +19,11 @@ class HBNBCommand(cmd.Cmd):
     classes = {
         "BaseModel",
         "User",
+        "Place",
+        "State",
+        "City",
+        "Amenity",
+        "Review",
     }
 
     def parse(arg):
@@ -54,7 +59,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel
-Usage: create <class_name>"""
+        Usage: create <class_name>"""
         if len(arg) == 0:
             print("** class name missing **")
         elif arg not in HBNBCommand.classes:
