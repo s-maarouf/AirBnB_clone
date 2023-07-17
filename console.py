@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Console module"""""
+"""Defines the HBnB console."""
 import cmd
 import models
 from models.base_model import BaseModel
@@ -48,7 +48,8 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel"""
+        """Creates a new instance of BaseModel
+Usage: create <class_name>"""
         if len(arg) == 0:
             print("** class name missing **")
         elif arg not in HBNBCommand.classes:
@@ -58,7 +59,8 @@ class HBNBCommand(cmd.Cmd):
             models.storage.save()
 
     def do_show(self, arg):
-        """Prints the string representation of an instance"""
+        """Prints the string representation of an instance
+Usage: show <class_name>, or <class name>.show(<id>)"""
         argums = HBNBCommand.parse(arg)
         obdict = models.storage.all()
         if len(argums) == 0:
@@ -73,7 +75,8 @@ class HBNBCommand(cmd.Cmd):
             print(obdict["{}.{}".format(argums[0], argums[1])])
 
     def do_destroy(self, arg):
-        """Deletes an instance"""
+        """Deletes an instance
+Usage: destroy <class_name>, or <class name>.destroy(<id>)"""
         argums = HBNBCommand.parse(arg)
         obdict = models.storage.all()
         if len(argums) == 0:
@@ -89,7 +92,8 @@ class HBNBCommand(cmd.Cmd):
             models.storage.save()
 
     def do_all(self, arg):
-        """Prints all instances"""
+        """Prints all instances
+Usage: all, or <class_name> all, or <class_name>.all()"""
         argums = HBNBCommand.parse(arg)
         obdict = models.storage.all()
         if len(argums) > 0 and argums[0] not in HBNBCommand.classes:
@@ -150,7 +154,8 @@ Usage: update <class name> <id> <attribute name> "<attribute value>\""""
         models.storage.save()
 
     def do_count(self, arg):
-        """Counts the number of instances of a class"""
+        """Counts the number of instances of a class
+Usage: count <class_name>, or <class_name>.count()"""
         argums = HBNBCommand.parse(arg)
         count = 0
         for obj in models.storage.all().values():
