@@ -118,8 +118,11 @@ Usage: all, or <class_name> all, or <class_name>.all()"""
             print(objv)
 
     def do_update(self, arg):
-        """Updates an instance
-Usage: update <class name> <id> <attribute name> "<attribute value>\""""
+        """Updates an instance based on its ID with a dictionary representation
+Usage: update <class_name> <id> <dictionary_representation>
+
+Example: update User 12345678-1234-1234-1234-1234567890ab {"name": "John", "age": 30}
+        """
         argums = HBNBCommand.parse(arg)
         obdict = models.storage.all()
 
