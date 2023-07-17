@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""User class"""
+"""State class"""
 from models.base_model import BaseModel
 
 

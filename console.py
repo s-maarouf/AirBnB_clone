@@ -1,9 +1,14 @@
 #!/usr/bin/python3
-"""Console module"""""
+"""Defines the HBnB console."""
 import cmd
 import models
 from models.base_model import BaseModel
 from models.user import User
+from models.amenity import Amenity
+from models.city import City
+from models.place import Place
+from models.review import Review
+from models.state import State
 import re
 from models.place import Place
 from models.state import State
@@ -57,7 +62,8 @@ class HBNBCommand(cmd.Cmd):
         pass
 
     def do_create(self, arg):
-        """Creates a new instance of BaseModel"""
+        """Creates a new instance of BaseModel
+Usage: create <class_name>"""
         if len(arg) == 0:
             print("** class name missing **")
         elif arg not in HBNBCommand.classes:
@@ -67,7 +73,8 @@ class HBNBCommand(cmd.Cmd):
             models.storage.save()
 
     def do_show(self, arg):
-        """Prints the string representation of an instance"""
+        """Prints the string representation of an instance
+Usage: show <class_name>, or <class name>.show(<id>)"""
         argums = HBNBCommand.parse(arg)
         obdict = models.storage.all()
         if len(argums) == 0:
@@ -82,7 +89,8 @@ class HBNBCommand(cmd.Cmd):
             print(obdict["{}.{}".format(argums[0], argums[1])])
 
     def do_destroy(self, arg):
-        """Deletes an instance"""
+        """Deletes an instance
+Usage: destroy <class_name>, or <class name>.destroy(<id>)"""
         argums = HBNBCommand.parse(arg)
         obdict = models.storage.all()
         if len(argums) == 0:
@@ -98,7 +106,8 @@ class HBNBCommand(cmd.Cmd):
             models.storage.save()
 
     def do_all(self, arg):
-        """Prints all instances"""
+        """Prints all instances
+Usage: all, or <class_name> all, or <class_name>.all()"""
         argums = HBNBCommand.parse(arg)
         obdict = models.storage.all()
         if len(argums) > 0 and argums[0] not in HBNBCommand.classes:
@@ -157,6 +166,35 @@ Usage: update <class name> <id> <attribute name> "<attribute value>\""""
                 else:
                     obj.__dict__[k] = v
         models.storage.save()
+
+    def do_count(self, arg):
+        """Counts the number of instances of a class
+Usage: count <class_name>, or <class_name>.count()"""
+        argums = HBNBCommand.parse(arg)
+        count = 0
+        for obj in models.storage.all().values():
+            if argums[0] == obj.__class__.__name__:
+                count += 1
+        print(count)
+
+    def default(self, arg):
+        """default behavior for cmd when input is invalid"""
+        argdict = {
+            "all": self.do_all,
+            "count": self.do_count,
+            "show": self.do_show,
+        }
+        match = re.search(r"\.", arg)
+        if match is not None:
+            argl = [arg[:match.span()[0]], arg[match.span()[1]:]]
+            match = re.search(r"\((.*?)\)", argl[1])
+            if match is not None:
+                command = [argl[1][:match.span()[0]], match.group()[1:-1]]
+                if command[0] in argdict.keys():
+                    call = "{} {}".format(argl[0], command[1])
+                    return argdict[command[0]](call)
+        print("*** Unknown syntax: {}".format(arg))
+        return False
 
 
 if __name__ == '__main__':
