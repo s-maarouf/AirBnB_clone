@@ -27,6 +27,7 @@ class HBNBCommand(cmd.Cmd):
     }
 
     def parse(arg):
+        """parses an input argument and returns a list of parsed elements"""
         curly_braces_match = re.search(r"\{(.*?)\}", arg)
         brackets_match = re.search(r"\[(.*?)\]", arg)
 
@@ -59,7 +60,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, arg):
         """Creates a new instance of BaseModel
-        Usage: create <class_name>"""
+Usage: create <class_name>"""
         if len(arg) == 0:
             print("** class name missing **")
         elif arg not in HBNBCommand.classes:
